@@ -472,6 +472,8 @@ public class CreationOngletPhase {
 				int tiret = division.indexOf("-");
 				if (tiret > 0) {
 					result = division.substring(0, tiret);
+				} else if (division.toUpperCase().endsWith("1PH") || division.toUpperCase().endsWith("1PH")) {
+					result = division.substring(0, division.length() - 3);
 				}
 				String suffixe = "";
 				int index = equipe.indexOf(ENTENTE);
@@ -485,7 +487,7 @@ public class CreationOngletPhase {
 				}
 				result = result + suffixe;
 			} else if (division.startsWith("R") && division.charAt(2) == 'U') {
-				// Si commence par R et é U en 3eme caractére, c'est une équipe
+				// Si commence par R et U en 2eme caractére, c'est une équipe
 				// jeune région
 				result = division.substring(2) + division.charAt(1)
 						+ " - 1 Région";
