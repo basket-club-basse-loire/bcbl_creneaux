@@ -341,7 +341,7 @@ public class CreationOngletPhase {
 						getMasculinFont());
 			}
 
-			if (!domicile) {
+			if (exempt || !domicile) {
 				for (int j = 1; j < values.length; j++) {
 					CellUtil.setCellStyleProperty(outputRow.getCell(j + 1),
 							outputWb, CellUtil.FILL_PATTERN,
