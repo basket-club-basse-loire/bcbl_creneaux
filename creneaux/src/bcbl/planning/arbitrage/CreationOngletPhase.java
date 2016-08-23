@@ -478,7 +478,7 @@ public class CreationOngletPhase {
 				String suffixe = "";
 				int index = equipe.indexOf(ENTENTE);
 				if (index >= 0) {
-					suffixe = equipe.substring(index + ENTENTE.length());
+					suffixe = equipe.substring(index + ENTENTE.length()) + " (CTC)";
 				} else {
 					index = equipe.indexOf(BCBL);
 					if (index >= 0) {
