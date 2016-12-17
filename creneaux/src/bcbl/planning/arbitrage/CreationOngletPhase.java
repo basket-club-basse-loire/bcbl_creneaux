@@ -140,6 +140,7 @@ public class CreationOngletPhase {
 	public void doIt() throws IOException {
 		int rows = extractFbiSheet.getPhysicalNumberOfRows();
 
+		System.out.println("physicalNumberOfRows = " + rows);
 		Calendar currentWeek = null;
 		List<HSSFRow> rowsParWeekend = new ArrayList<HSSFRow>();
 
@@ -149,7 +150,7 @@ public class CreationOngletPhase {
 		// chronologiquement ascendant
 		for (int r = 1; r < rows; r++) {
 			HSSFRow row = extractFbiSheet.getRow(r);
-			if (row != null) {
+			if (row != null && (row.getCell(EQUIPE1_COLIDX) != null)) {
 
 				String equipe1 = row.getCell(EQUIPE1_COLIDX)
 						.getStringCellValue();
