@@ -84,6 +84,9 @@ public class CreationOngletLicencies {
 					continue;
 				}
 				String categorie = cellCategorie.getStringCellValue();
+				if (categorie == null || categorie.trim().isEmpty()) {
+					continue;
+				}
 
 				Cell cellEquipe = row.getCell(9);
 				if (cellEquipe == null) {
@@ -94,7 +97,7 @@ public class CreationOngletLicencies {
 				Licencie licencie = new Licencie();
 				licencie.nomPrenom = row.getCell(5).getStringCellValue() + " "
 						+ row.getCell(6).getStringCellValue();
-				licencie.email = row.getCell(16).getStringCellValue();
+				licencie.email = row.getCell(17).getStringCellValue();
 
 				HashMap<String, List<Licencie>> map;
 				if (categorie.startsWith("S")) {

@@ -322,6 +322,10 @@ public class CreationOngletPhase {
 			// Officiels
 			boolean officiels = (nomEquipeBcbl.startsWith("R")
 					|| nomEquipeBcbl.contains("Région")) && (!nomEquipeBcbl.contains("Réserve"));
+			
+			if (nomEquipeBcbl.equals("DF1")) {
+				officiels = true;
+			}
 
 			if (domicile && officiels) {
 				values[1] = values[2] = "OFFICIELS";
