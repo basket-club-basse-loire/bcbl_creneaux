@@ -10,6 +10,6 @@
 <listEntry value="1"/>
 </listAttribute>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="bcbl.planning.arbitrage.Planning"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-extract &quot;data\2017_2018_bcbl_ghb_phase1.xls&quot; -output &quot;tests\planning rencontres.xls&quot; -onglet &quot;Phase 1&quot; -mapping data\mapping_2017_2018.properties -licencies &quot;C:\usr\Personnel\basket\equipes\saison 2017_2018\2017-2018 Listing Licencies.xls&quot; -overwrite"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-extract &quot;data\2018_2019_bcbl_ghb_phase1.xls&quot; -output &quot;tests\planning rencontres.xls&quot; -onglet &quot;Phase 1&quot; -mapping data\mapping_2018_2019.properties -licencies &quot;C:\usr\Personnel\basket\equipes\saison 2018_2019\2018-2019 Listing Licencies.xls&quot; -overwrite"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="creneaux"/>
 </launchConfiguration>
