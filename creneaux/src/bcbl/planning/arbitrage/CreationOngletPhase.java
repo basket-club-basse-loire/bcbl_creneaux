@@ -78,8 +78,7 @@ public class CreationOngletPhase {
 		return team;
 	}
 
-	public CreationOngletPhase(HSSFSheet extractFbiSheet, Workbook outputWb,
-			Sheet ongletSheet, Properties mappings) {
+	public CreationOngletPhase(HSSFSheet extractFbiSheet, Workbook outputWb, Sheet ongletSheet, Properties mappings) {
 		this.extractFbiSheet = extractFbiSheet;
 		this.outputWb = outputWb;
 		this.ongletSheet = ongletSheet;
@@ -112,6 +111,7 @@ public class CreationOngletPhase {
 		if (col0CS == null) {
 			col0CS = outputWb.createCellStyle();
 			col0CS.cloneStyleFrom(getContentCS());
+			col0CS.setDataFormat(outputWb.createDataFormat().getFormat("ddd. hh:mm"));
 		}
 		return col0CS;
 	}
@@ -152,32 +152,26 @@ public class CreationOngletPhase {
 			HSSFRow row = extractFbiSheet.getRow(r);
 			if (row != null && (row.getCell(EQUIPE1_COLIDX) != null)) {
 
-				String equipe1 = row.getCell(EQUIPE1_COLIDX)
-						.getStringCellValue();
-				String equipe2 = row.getCell(EQUIPE2_COLIDX)
-						.getStringCellValue();
-				if (equipe1.contains(BCBL) || equipe1.contains(ENTENTE)
-						|| equipe2.contains(BCBL) || equipe2.contains(ENTENTE)) {
+				String equipe1 = row.getCell(EQUIPE1_COLIDX).getStringCellValue();
+				String equipe2 = row.getCell(EQUIPE2_COLIDX).getStringCellValue();
+				if (equipe1.contains(BCBL) || equipe1.contains(ENTENTE) || equipe2.contains(BCBL)
+						|| equipe2.contains(ENTENTE)) {
 
 					HSSFCell cell = row.getCell(DATE_RENCONTRE_COLIDX);
-					
+
 					if (currentWeek == null) {
-						currentWeek = GregorianCalendar
-								.getInstance(Locale.FRANCE);
+						currentWeek = GregorianCalendar.getInstance(Locale.FRANCE);
 						currentWeek.setTime(cell.getDateCellValue());
 						rowsParWeekend.add(row);
 					} else {
 						// Si méme semaine, on conserve dans le méme set
-						Calendar calendar = GregorianCalendar
-								.getInstance(Locale.FRANCE);
+						Calendar calendar = GregorianCalendar.getInstance(Locale.FRANCE);
 						calendar.setTime(cell.getDateCellValue());
-						if (calendar.get(Calendar.WEEK_OF_YEAR) == currentWeek
-								.get(Calendar.WEEK_OF_YEAR)) {
+						if (calendar.get(Calendar.WEEK_OF_YEAR) == currentWeek.get(Calendar.WEEK_OF_YEAR)) {
 							rowsParWeekend.add(row);
 						} else {
 
-							processRows(currentWeek, rowsParWeekend,
-									addressList);
+							processRows(currentWeek, rowsParWeekend, addressList);
 
 							// Nouveau week-end
 							currentWeek = calendar;
@@ -188,30 +182,27 @@ public class CreationOngletPhase {
 				}
 			}
 		}
-		
+
 		if (!rowsParWeekend.isEmpty()) {
 			processRows(currentWeek, rowsParWeekend, addressList);
 			rowsParWeekend.clear();
 		}
-		
-		DVConstraint dvConstraint = DVConstraint
-				.createFormulaListConstraint("effectifs");
-		DataValidation dataValidation = new HSSFDataValidation(addressList,
-				dvConstraint);
+
+		DVConstraint dvConstraint = DVConstraint.createFormulaListConstraint("effectifs");
+		DataValidation dataValidation = new HSSFDataValidation(addressList, dvConstraint);
 		dataValidation.setSuppressDropDownArrow(false);
 		dataValidation.setEmptyCellAllowed(true);
 
 		ongletSheet.addValidationData(dataValidation);
 
-		ongletSheet.setColumnWidth(0, 25 * 256);
+		ongletSheet.setColumnWidth(0, 12 * 256);
 		for (int i = 1; i < 6; i++) {
 			ongletSheet.setColumnWidth(i, 20 * 256);
 		}
 
 	}
 
-	private void processRows(Calendar weekend, List<HSSFRow> rows,
-			CellRangeAddressList addressList) {
+	private void processRows(Calendar weekend, List<HSSFRow> rows, CellRangeAddressList addressList) {
 		Date samedi;
 		Date dimanche;
 		if (weekend.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
@@ -231,16 +222,14 @@ public class CreationOngletPhase {
 		DateFormat df2 = new SimpleDateFormat("dd MMMM yyyy", Locale.FRANCE);
 
 		Row outputRow = ongletSheet.createRow(ongletRowIndex++);
-		createHeaderCell(outputRow, 0,
-				df1.format(samedi) + " au " + df2.format(dimanche));
+		createHeaderCell(outputRow, 0, df1.format(samedi) + " au " + df2.format(dimanche));
 
-		SheetConditionalFormatting sheetCF = ongletSheet
-				.getSheetConditionalFormatting();
+		SheetConditionalFormatting sheetCF = ongletSheet.getSheetConditionalFormatting();
 
 		ongletRowIndex++;
 		outputRow = ongletSheet.createRow(ongletRowIndex++);
-		createTableHeaderCells(outputRow, new String[] { "Catégorie",
-				"1er Arbitre", "2ème Arbitre", "Marqueur", "Chronométreur" });
+		createTableHeaderCells(outputRow,
+				new String[] { "Catégorie", "1er Arbitre", "2ème Arbitre", "Marqueur", "Chronométreur" });
 
 		Collections.sort(rows, new Comparator<HSSFRow>() {
 			public int compare(HSSFRow o1, HSSFRow o2) {
@@ -275,44 +264,43 @@ public class CreationOngletPhase {
 			outputRow = ongletSheet.createRow(ongletRowIndex++);
 
 			//
-			boolean exempt = row.getCell(EQUIPE1_COLIDX).getStringCellValue()
-					.contains(EXEMPT)
-					|| row.getCell(EQUIPE2_COLIDX).getStringCellValue()
-							.contains(EXEMPT);
+			boolean exempt = row.getCell(EQUIPE1_COLIDX).getStringCellValue().contains(EXEMPT)
+					|| row.getCell(EQUIPE2_COLIDX).getStringCellValue().contains(EXEMPT);
 
-			String equipeRecevant = row.getCell(EQUIPE1_COLIDX)
-					.getStringCellValue();
-			boolean domicile = equipeRecevant.contains(BCBL)
-					|| equipeRecevant.contains(ENTENTE);
+			String equipeRecevant = row.getCell(EQUIPE1_COLIDX).getStringCellValue();
+			boolean domicile = equipeRecevant.contains(BCBL) || equipeRecevant.contains(ENTENTE);
 
 			if (exempt) {
 				outputRow.createCell(0).setCellValue("Exempt");
 			} else {
+				GregorianCalendar gcMatch = new GregorianCalendar();
+				gcMatch.setTime(row.getCell(DATE_RENCONTRE_COLIDX).getDateCellValue());
+				
+				GregorianCalendar gcHeure = new GregorianCalendar(); 
+				gcHeure.setTime(row.getCell(HEURE_RENCONTRE_COLIDX).getDateCellValue());
+				
+				gcMatch.set(Calendar.HOUR_OF_DAY, gcHeure.get(Calendar.HOUR_OF_DAY));
+				gcMatch.set(Calendar.MINUTE, gcHeure.get(Calendar.MINUTE));
+				gcMatch.set(Calendar.SECOND, 0);
+				gcMatch.set(Calendar.MILLISECOND, 0);
+								
 				if (domicile) {
-					Date jour = row.getCell(DATE_RENCONTRE_COLIDX)
-							.getDateCellValue();
-					Date heure = row.getCell(HEURE_RENCONTRE_COLIDX)
-							.getDateCellValue();
 					// jour rencontre + heure
-					String value = new SimpleDateFormat("EEE", Locale.FRANCE)
-							.format(jour)
-							+ " "
-							+ new SimpleDateFormat("HH:mm", Locale.FRANCE)
-									.format(heure);
+					String value = new SimpleDateFormat("EEE", Locale.FRANCE).format(gcMatch.getTime()) + " "
+							+ new SimpleDateFormat("HH:mm", Locale.FRANCE).format(gcMatch.getTime());
 					outputRow.createCell(0).setCellValue(value);
 				} else {
 					// club recevant
-					outputRow
-							.createCell(0)
-							.setCellValue(
-									WordUtils
-											.capitalizeFully(convertTeamToClub(equipeRecevant)));
+					outputRow.createCell(0).setCellValue(WordUtils.capitalizeFully(convertTeamToClub(equipeRecevant)));
 				}
+				
+				outputRow.getCell(0).setCellValue(gcMatch.getTime());
+				// jjj. hh:mm
+				
 			}
 			outputRow.getCell(0).setCellStyle(getCol0CS());
 			if (exempt || !domicile) {
-				CellUtil.setFont(outputRow.getCell(0), outputWb,
-						getExterieurFont());
+				CellUtil.setFont(outputRow.getCell(0), outputWb, getExterieurFont());
 			}
 
 			//
@@ -320,9 +308,9 @@ public class CreationOngletPhase {
 			String[] values = new String[5];
 			values[0] = nomEquipeBcbl;
 			// Officiels
-			boolean officiels = (nomEquipeBcbl.startsWith("R")
-					|| nomEquipeBcbl.contains("Région")) && (!nomEquipeBcbl.contains("Réserve"));
-			
+			boolean officiels = (nomEquipeBcbl.startsWith("R") || nomEquipeBcbl.contains("Région"))
+					&& (!nomEquipeBcbl.contains("Réserve"));
+
 			if (nomEquipeBcbl.equals("DF1")) {
 				officiels = true;
 			}
@@ -339,17 +327,14 @@ public class CreationOngletPhase {
 			// Feminin
 			boolean feminin = nomEquipeBcbl.contains("F");
 			if (feminin) {
-				CellUtil.setFont(outputRow.getCell(1), outputWb,
-						getFemininFont());
+				CellUtil.setFont(outputRow.getCell(1), outputWb, getFemininFont());
 			} else {
-				CellUtil.setFont(outputRow.getCell(1), outputWb,
-						getMasculinFont());
+				CellUtil.setFont(outputRow.getCell(1), outputWb, getMasculinFont());
 			}
 
 			if (exempt || !domicile) {
 				for (int j = 1; j < values.length; j++) {
-					CellUtil.setCellStyleProperty(outputRow.getCell(j + 1),
-							outputWb, CellUtil.FILL_PATTERN,
+					CellUtil.setCellStyleProperty(outputRow.getCell(j + 1), outputWb, CellUtil.FILL_PATTERN,
 							CellStyle.THIN_FORWARD_DIAG);
 				}
 			}
@@ -357,35 +342,40 @@ public class CreationOngletPhase {
 			//
 			// Pour chacune des cellules non vides, on rajoute une
 			// validation
-			if (!exempt && domicile) {
-				outputRow.createCell(6)
-						.setCellValue(
-								WordUtils.capitalizeFully(convertTeamToClub(row
-										.getCell(EQUIPE2_COLIDX)
-										.getStringCellValue())));
-				outputRow.getCell(6).setCellStyle(getContentCS());
+			if (!exempt) {
+				if (domicile) {
+					outputRow.createCell(6).setCellValue("Domicile");
+					outputRow.getCell(6).setCellStyle(getContentCS());
+					outputRow.createCell(7).setCellValue(WordUtils
+							.capitalizeFully(convertTeamToClub(row.getCell(EQUIPE2_COLIDX).getStringCellValue())));
+					outputRow.getCell(7).setCellStyle(getContentCS());
 
-				CellRangeAddress cra;
-				int rowIndex = ongletRowIndex - 1;
-				if (domicile && officiels) {
-					cra = new CellRangeAddress(rowIndex, rowIndex, 4, 5);
+					CellRangeAddress cra;
+					int rowIndex = ongletRowIndex - 1;
+					if (domicile && officiels) {
+						cra = new CellRangeAddress(rowIndex, rowIndex, 4, 5);
+					} else {
+						cra = new CellRangeAddress(rowIndex, rowIndex, 2, 5);
+					}
+					addressList.addCellRangeAddress(cra);
+
+					// Conditional Formatting
+					if (false) {
+						String formula = "AND(ISERROR(FIND(\"sam\",A" + ongletRowIndex + ",1)),ISERROR(FIND(\"dim\",A"
+								+ ongletRowIndex + ",1)))";
+						ConditionalFormattingRule cfr = sheetCF.createConditionalFormattingRule(formula);
+						PatternFormatting pf = cfr.createPatternFormatting();
+						pf.setFillPattern(CellStyle.THIN_FORWARD_DIAG);
+
+						sheetCF.addConditionalFormatting(new CellRangeAddress[] { cra }, cfr);
+					}
 				} else {
-					cra = new CellRangeAddress(rowIndex, rowIndex, 2, 5);
-				}
-				addressList.addCellRangeAddress(cra);
+					// club recevant
+					outputRow.createCell(6).setCellValue("Exterieur");
+					CellUtil.setFont(outputRow.getCell(6), outputWb, getExterieurFont());
 
-				// Conditional Formatting
-				if (false) {
-					String formula = "AND(ISERROR(FIND(\"sam\",A"
-							+ ongletRowIndex + ",1)),ISERROR(FIND(\"dim\",A"
-							+ ongletRowIndex + ",1)))";
-					ConditionalFormattingRule cfr = sheetCF
-							.createConditionalFormattingRule(formula);
-					PatternFormatting pf = cfr.createPatternFormatting();
-					pf.setFillPattern(CellStyle.THIN_FORWARD_DIAG);
-
-					sheetCF.addConditionalFormatting(
-							new CellRangeAddress[] { cra }, cfr);
+					outputRow.createCell(7).setCellValue(WordUtils.capitalizeFully(convertTeamToClub(equipeRecevant)));
+					CellUtil.setFont(outputRow.getCell(7), outputWb, getExterieurFont());
 				}
 			}
 		}
@@ -446,8 +436,7 @@ public class CreationOngletPhase {
 		createTableRowCells(outputRow, values, getTableRowCS());
 	}
 
-	private void createTableRowCells(Row outputRow, String[] values,
-			CellStyle cs) {
+	private void createTableRowCells(Row outputRow, String[] values, CellStyle cs) {
 		for (int i = 0; i < values.length; i++) {
 			Cell cell = outputRow.createCell(i + 1);
 			cell.setCellValue(values[i]);
@@ -494,8 +483,7 @@ public class CreationOngletPhase {
 			} else if (division.startsWith("R") && division.charAt(2) == 'U') {
 				// Si commence par R et U en 2eme caractére, c'est une équipe
 				// jeune région
-				result = division.substring(2) + division.charAt(1)
-						+ " - 1 Région";
+				result = division.substring(2) + division.charAt(1) + " - 1 Région";
 			} else {
 				// Sinon, équipe logique
 				result = division;
