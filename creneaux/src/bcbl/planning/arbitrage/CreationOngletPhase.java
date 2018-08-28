@@ -45,6 +45,7 @@ public class CreationOngletPhase {
 	public final static int EQUIPE2_COLIDX = 3;
 	public final static int DATE_RENCONTRE_COLIDX = 4;
 	public final static int HEURE_RENCONTRE_COLIDX = 5;
+	public final static int SALLE_COLIDX = 6;
 
 	private HSSFSheet extractFbiSheet;
 	private Workbook outputWb;
@@ -196,7 +197,8 @@ public class CreationOngletPhase {
 		ongletSheet.addValidationData(dataValidation);
 
 		ongletSheet.setColumnWidth(0, 12 * 256);
-		for (int i = 1; i < 6; i++) {
+		ongletSheet.setColumnWidth(1, 12 * 256);
+		for (int i = 2; i < 7; i++) {
 			ongletSheet.setColumnWidth(i, 20 * 256);
 		}
 
@@ -284,23 +286,25 @@ public class CreationOngletPhase {
 				gcMatch.set(Calendar.SECOND, 0);
 				gcMatch.set(Calendar.MILLISECOND, 0);
 								
-				if (domicile) {
-					// jour rencontre + heure
-					String value = new SimpleDateFormat("EEE", Locale.FRANCE).format(gcMatch.getTime()) + " "
-							+ new SimpleDateFormat("HH:mm", Locale.FRANCE).format(gcMatch.getTime());
-					outputRow.createCell(0).setCellValue(value);
-				} else {
-					// club recevant
-					outputRow.createCell(0).setCellValue(WordUtils.capitalizeFully(convertTeamToClub(equipeRecevant)));
-				}
-				
-				outputRow.getCell(0).setCellValue(gcMatch.getTime());
-				// jjj. hh:mm
-				
+				outputRow.createCell(0).setCellValue(gcMatch.getTime());				
 			}
 			outputRow.getCell(0).setCellStyle(getCol0CS());
 			if (exempt || !domicile) {
 				CellUtil.setFont(outputRow.getCell(0), outputWb, getExterieurFont());
+			}
+			
+			// 
+			if (!exempt && domicile) {
+				String salle = row.getCell(SALLE_COLIDX).getStringCellValue();
+				if (salle.toLowerCase().contains("rigaudeau")) {
+					outputRow.createCell(1).setCellValue("Rigaudeau");					
+				} else if (salle.toLowerCase().contains("flute")) {
+					outputRow.createCell(1).setCellValue("Flûte");					
+				} else if (salle.toLowerCase().contains("bellestre")) {
+					outputRow.createCell(1).setCellValue("Bouaye");
+				} else {
+					outputRow.createCell(1).setCellValue("Souvré");
+				}
 			}
 
 			//
@@ -327,14 +331,14 @@ public class CreationOngletPhase {
 			// Feminin
 			boolean feminin = nomEquipeBcbl.contains("F");
 			if (feminin) {
-				CellUtil.setFont(outputRow.getCell(1), outputWb, getFemininFont());
+				CellUtil.setFont(outputRow.getCell(2), outputWb, getFemininFont());
 			} else {
-				CellUtil.setFont(outputRow.getCell(1), outputWb, getMasculinFont());
+				CellUtil.setFont(outputRow.getCell(2), outputWb, getMasculinFont());
 			}
 
 			if (exempt || !domicile) {
 				for (int j = 1; j < values.length; j++) {
-					CellUtil.setCellStyleProperty(outputRow.getCell(j + 1), outputWb, CellUtil.FILL_PATTERN,
+					CellUtil.setCellStyleProperty(outputRow.getCell(j + 2), outputWb, CellUtil.FILL_PATTERN,
 							CellStyle.THIN_FORWARD_DIAG);
 				}
 			}
@@ -344,11 +348,11 @@ public class CreationOngletPhase {
 			// validation
 			if (!exempt) {
 				if (domicile) {
-					outputRow.createCell(6).setCellValue("Domicile");
-					outputRow.getCell(6).setCellStyle(getContentCS());
-					outputRow.createCell(7).setCellValue(WordUtils
-							.capitalizeFully(convertTeamToClub(row.getCell(EQUIPE2_COLIDX).getStringCellValue())));
+					outputRow.createCell(7).setCellValue("Domicile");
 					outputRow.getCell(7).setCellStyle(getContentCS());
+					outputRow.createCell(8).setCellValue(WordUtils
+							.capitalizeFully(convertTeamToClub(row.getCell(EQUIPE2_COLIDX).getStringCellValue())));
+					outputRow.getCell(8).setCellStyle(getContentCS());
 
 					CellRangeAddress cra;
 					int rowIndex = ongletRowIndex - 1;
@@ -371,11 +375,11 @@ public class CreationOngletPhase {
 					}
 				} else {
 					// club recevant
-					outputRow.createCell(6).setCellValue("Exterieur");
-					CellUtil.setFont(outputRow.getCell(6), outputWb, getExterieurFont());
-
-					outputRow.createCell(7).setCellValue(WordUtils.capitalizeFully(convertTeamToClub(equipeRecevant)));
+					outputRow.createCell(7).setCellValue("Exterieur");
 					CellUtil.setFont(outputRow.getCell(7), outputWb, getExterieurFont());
+
+					outputRow.createCell(8).setCellValue(WordUtils.capitalizeFully(convertTeamToClub(equipeRecevant)));
+					CellUtil.setFont(outputRow.getCell(8), outputWb, getExterieurFont());
 				}
 			}
 		}
@@ -438,7 +442,7 @@ public class CreationOngletPhase {
 
 	private void createTableRowCells(Row outputRow, String[] values, CellStyle cs) {
 		for (int i = 0; i < values.length; i++) {
-			Cell cell = outputRow.createCell(i + 1);
+			Cell cell = outputRow.createCell(i + 2);
 			cell.setCellValue(values[i]);
 			cell.setCellStyle(cs);
 		}
