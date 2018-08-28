@@ -297,9 +297,9 @@ public class CreationOngletPhase {
 			if (!exempt && domicile) {
 				String salle = row.getCell(SALLE_COLIDX).getStringCellValue();
 				if (salle.toLowerCase().contains("rigaudeau")) {
-					outputRow.createCell(1).setCellValue("Rigaudeau");					
+					outputRow.createCell(1).setCellValue("Le Pellerin");					
 				} else if (salle.toLowerCase().contains("flute")) {
-					outputRow.createCell(1).setCellValue("Flûte");					
+					outputRow.createCell(1).setCellValue("Flute");					
 				} else if (salle.toLowerCase().contains("bellestre")) {
 					outputRow.createCell(1).setCellValue("Bouaye");
 				} else {
