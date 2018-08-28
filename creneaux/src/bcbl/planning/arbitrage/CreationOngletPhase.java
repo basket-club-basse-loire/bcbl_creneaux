@@ -357,9 +357,9 @@ public class CreationOngletPhase {
 					CellRangeAddress cra;
 					int rowIndex = ongletRowIndex - 1;
 					if (domicile && officiels) {
-						cra = new CellRangeAddress(rowIndex, rowIndex, 4, 5);
+						cra = new CellRangeAddress(rowIndex, rowIndex, 5, 6);
 					} else {
-						cra = new CellRangeAddress(rowIndex, rowIndex, 2, 5);
+						cra = new CellRangeAddress(rowIndex, rowIndex, 3, 6);
 					}
 					addressList.addCellRangeAddress(cra);
 
