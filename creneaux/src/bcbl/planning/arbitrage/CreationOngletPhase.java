@@ -39,13 +39,17 @@ public class CreationOngletPhase {
 	public final static String BCBL = "BASKET CLUB BASSE LOIRE";
 	public final static String ENTENTE = "LOIRE ACHENEAU BASKET";
 	public final static String EXEMPT = "Exempt";
+	
+	public final static int DIVISION_COLIDX = indexOfColumn('A');
+	public final static int EQUIPE1_COLIDX = indexOfColumn('C');
+	public final static int EQUIPE2_COLIDX = indexOfColumn('D');
+	public final static int DATE_RENCONTRE_COLIDX = indexOfColumn('E');
+	public final static int HEURE_RENCONTRE_COLIDX = indexOfColumn('F');
+	public final static int SALLE_COLIDX = indexOfColumn('G');
 
-	public final static int DIVISION_COLIDX = 0;
-	public final static int EQUIPE1_COLIDX = 2;
-	public final static int EQUIPE2_COLIDX = 3;
-	public final static int DATE_RENCONTRE_COLIDX = 4;
-	public final static int HEURE_RENCONTRE_COLIDX = 5;
-	public final static int SALLE_COLIDX = 6;
+	private static int indexOfColumn(char column) {
+		return column - 'A';
+	}
 
 	private HSSFSheet extractFbiSheet;
 	private Workbook outputWb;
@@ -201,6 +205,7 @@ public class CreationOngletPhase {
 		for (int i = 2; i < 7; i++) {
 			ongletSheet.setColumnWidth(i, 20 * 256);
 		}
+		ongletSheet.setColumnWidth(8, 27 * 256);
 
 	}
 
@@ -294,8 +299,13 @@ public class CreationOngletPhase {
 			}
 			
 			// 
+			String salle;
+			if (row.getCell(SALLE_COLIDX) != null) {
+				salle = row.getCell(SALLE_COLIDX).getStringCellValue();
+			} else {
+				salle = "";
+			}
 			if (!exempt && domicile) {
-				String salle = row.getCell(SALLE_COLIDX).getStringCellValue();
 				if (salle.toLowerCase().contains("rigaudeau")) {
 					outputRow.createCell(1).setCellValue("Le Pellerin");					
 				} else if (salle.toLowerCase().contains("flute")) {
@@ -350,10 +360,14 @@ public class CreationOngletPhase {
 				if (domicile) {
 					outputRow.createCell(7).setCellValue("Domicile");
 					outputRow.getCell(7).setCellStyle(getContentCS());
+					
 					outputRow.createCell(8).setCellValue(WordUtils
 							.capitalizeFully(convertTeamToClub(row.getCell(EQUIPE2_COLIDX).getStringCellValue())));
 					outputRow.getCell(8).setCellStyle(getContentCS());
 
+					outputRow.createCell(9).setCellValue(salle);
+					outputRow.getCell(9).setCellStyle(getContentCS());
+					
 					CellRangeAddress cra;
 					int rowIndex = ongletRowIndex - 1;
 					if (domicile && officiels) {
@@ -380,6 +394,10 @@ public class CreationOngletPhase {
 
 					outputRow.createCell(8).setCellValue(WordUtils.capitalizeFully(convertTeamToClub(equipeRecevant)));
 					CellUtil.setFont(outputRow.getCell(8), outputWb, getExterieurFont());
+					
+					outputRow.createCell(9).setCellValue(salle);
+					CellUtil.setFont(outputRow.getCell(9), outputWb, getExterieurFont());
+					
 				}
 			}
 		}
