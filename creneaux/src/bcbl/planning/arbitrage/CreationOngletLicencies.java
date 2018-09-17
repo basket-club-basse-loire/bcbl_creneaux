@@ -228,19 +228,19 @@ public class CreationOngletLicencies {
 					membreRow.createCell(cellIdx).setCellFormula(
 							"if(iserror(indirect(\"'" + phase
 									+ "'!A1\")),0,countif(indirect(\"'" + phase
-									+ "'!C:C\"),A"
+									+ "'!D:D\"),A"
 									+ (membreRow.getRowNum() + 1)
 									+ ") + countif(indirect(\"'" + phase
-									+ "'!D:D\"),A"
+									+ "'!E:E\"),A"
 									+ (membreRow.getRowNum() + 1) + "))");
 					cellIdx++;
 					membreRow.createCell(cellIdx).setCellFormula(
 							"if(iserror(indirect(\"'" + phase
 									+ "'!A1\")),0,countif(indirect(\"'" + phase
-									+ "'!E:E\"),A"
+									+ "'!F:F\"),A"
 									+ (membreRow.getRowNum() + 1)
 									+ ") + countif(indirect(\"'" + phase
-									+ "'!F:F\"),A"
+									+ "'!G:G\"),A"
 									+ (membreRow.getRowNum() + 1) + "))");
 					cellIdx++;
 				}

@@ -332,6 +332,19 @@ public class CreationOngletPhase {
 			if (domicile && officiels) {
 				values[1] = values[2] = "OFFICIELS";
 			}
+			
+			// Ajout des entrées JEUNES s'il s'agit de match jeunes
+			if (domicile && !exempt && nomEquipeBcbl.startsWith("U")) {
+				// colonne 2eme arbitre
+				if (values[2] == null) {
+					values[2] = "JEUNES";
+				}
+				// colonne chronometreur
+				if (values[4] == null) {
+					values[4] = "JEUNES";
+				}
+			}
+			
 			if (i < rows.size() - 1) {
 				createTableRowCells(outputRow, values);
 			} else {
