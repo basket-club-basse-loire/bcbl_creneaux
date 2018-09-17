@@ -30,6 +30,10 @@ public class CreationOngletLicencies {
 	public final static int DATE_RENCONTRE_COLIDX = 4;
 	public final static int HEURE_RENCONTRE_COLIDX = 5;
 
+	private static int indexOfColumn(char column) {
+		return column - 'A';
+	}
+	
 	private HSSFSheet licenciesSheet;
 	private Workbook outputWb;
 	private Sheet effectifsSheet;
@@ -97,7 +101,13 @@ public class CreationOngletLicencies {
 				Licencie licencie = new Licencie();
 				licencie.nomPrenom = row.getCell(5).getStringCellValue() + " "
 						+ row.getCell(6).getStringCellValue();
-				licencie.email = row.getCell(17).getStringCellValue();
+				licencie.email = row.getCell(indexOfColumn('S')).getStringCellValue();
+				if (row.getCell(indexOfColumn('T')) != null) {
+					String email2 = row.getCell(indexOfColumn('T')).getStringCellValue();
+					if (email2.trim().length() > 0) {
+						licencie.email += (";" + email2); 
+					}
+				}
 
 				HashMap<String, List<Licencie>> map;
 				if (categorie.startsWith("S")) {
