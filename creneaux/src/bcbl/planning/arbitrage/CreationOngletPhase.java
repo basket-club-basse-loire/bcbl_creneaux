@@ -221,8 +221,11 @@ public class CreationOngletPhase {
 			weekend.add(Calendar.DAY_OF_YEAR, -1);
 			samedi = weekend.getTime();
 		} else {
-			System.out.println("Probleme de dates");
-			return;
+			System.out.println("1ere date n'est pas un samedi");
+			weekend.set(GregorianCalendar.DAY_OF_WEEK, GregorianCalendar.SATURDAY);
+			samedi = weekend.getTime();
+			weekend.add(Calendar.DAY_OF_YEAR, 1);
+			dimanche = weekend.getTime();
 		}
 
 		DateFormat df1 = new SimpleDateFormat("dd MMMM", Locale.FRANCE);
