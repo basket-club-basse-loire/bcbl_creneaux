@@ -41,6 +41,7 @@ public class CreationOngletPhase {
 	public final static String EXEMPT = "Exempt";
 	
 	public final static int DIVISION_COLIDX = indexOfColumn('A');
+	public final static int NUM_RENCONTRE_COLIDX = indexOfColumn('B');
 	public final static int EQUIPE1_COLIDX = indexOfColumn('C');
 	public final static int EQUIPE2_COLIDX = indexOfColumn('D');
 	public final static int DATE_RENCONTRE_COLIDX = indexOfColumn('E');
@@ -205,7 +206,8 @@ public class CreationOngletPhase {
 		for (int i = 2; i < 7; i++) {
 			ongletSheet.setColumnWidth(i, 20 * 256);
 		}
-		ongletSheet.setColumnWidth(8, 27 * 256);
+		ongletSheet.setColumnWidth(8, 8 * 256);		
+		ongletSheet.setColumnWidth(9, 27 * 256);
 
 	}
 
@@ -373,16 +375,18 @@ public class CreationOngletPhase {
 			// Pour chacune des cellules non vides, on rajoute une
 			// validation
 			if (!exempt) {
+				outputRow.createCell(7).setCellValue(row.getCell(NUM_RENCONTRE_COLIDX).getNumericCellValue());
+				outputRow.getCell(7).setCellStyle(getContentCS());
 				if (domicile) {
-					outputRow.createCell(7).setCellValue("Domicile");
-					outputRow.getCell(7).setCellStyle(getContentCS());
-					
-					outputRow.createCell(8).setCellValue(WordUtils
-							.capitalizeFully(convertTeamToClub(row.getCell(EQUIPE2_COLIDX).getStringCellValue())));
+					outputRow.createCell(8).setCellValue("Domicile");
 					outputRow.getCell(8).setCellStyle(getContentCS());
-
-					outputRow.createCell(9).setCellValue(salle);
+					
+					outputRow.createCell(9).setCellValue(WordUtils
+							.capitalizeFully(convertTeamToClub(row.getCell(EQUIPE2_COLIDX).getStringCellValue())));
 					outputRow.getCell(9).setCellStyle(getContentCS());
+
+					outputRow.createCell(10).setCellValue(salle);
+					outputRow.getCell(10).setCellStyle(getContentCS());
 					
 					CellRangeAddress cra;
 					int rowIndex = ongletRowIndex - 1;
@@ -405,14 +409,14 @@ public class CreationOngletPhase {
 					}
 				} else {
 					// club recevant
-					outputRow.createCell(7).setCellValue("Exterieur");
-					CellUtil.setFont(outputRow.getCell(7), outputWb, getExterieurFont());
-
-					outputRow.createCell(8).setCellValue(WordUtils.capitalizeFully(convertTeamToClub(equipeRecevant)));
+					outputRow.createCell(8).setCellValue("Exterieur");
 					CellUtil.setFont(outputRow.getCell(8), outputWb, getExterieurFont());
-					
-					outputRow.createCell(9).setCellValue(salle);
+
+					outputRow.createCell(9).setCellValue(WordUtils.capitalizeFully(convertTeamToClub(equipeRecevant)));
 					CellUtil.setFont(outputRow.getCell(9), outputWb, getExterieurFont());
+					
+					outputRow.createCell(10).setCellValue(salle);
+					CellUtil.setFont(outputRow.getCell(10), outputWb, getExterieurFont());
 					
 				}
 			}
