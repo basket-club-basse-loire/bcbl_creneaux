@@ -25,6 +25,7 @@ import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.ConditionalFormattingRule;
 import org.apache.poi.ss.usermodel.DataValidation;
 import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.PatternFormatting;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -366,8 +367,9 @@ public class CreationOngletPhase {
 
 			if (exempt || !domicile) {
 				for (int j = 1; j < values.length; j++) {
-					CellUtil.setCellStyleProperty(outputRow.getCell(j + 2), outputWb, CellUtil.FILL_PATTERN,
-							CellStyle.THIN_FORWARD_DIAG);
+					//CellUtil.setCellStyleProperty(outputRow.getCell(j + 2), outputWb, CellUtil.FILL_PATTERN, CellStyle.THIN_FORWARD_DIAG);
+					CellUtil.setCellStyleProperty(outputRow.getCell(j + 2), outputWb, CellUtil.FILL_PATTERN, CellStyle.SOLID_FOREGROUND);
+					CellUtil.setCellStyleProperty(outputRow.getCell(j + 2), outputWb, CellUtil.FILL_FOREGROUND_COLOR, IndexedColors.GREY_25_PERCENT.index);
 				}
 			}
 
