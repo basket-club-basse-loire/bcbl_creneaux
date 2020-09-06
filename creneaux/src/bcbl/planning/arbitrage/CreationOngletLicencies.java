@@ -30,6 +30,13 @@ public class CreationOngletLicencies {
 	public final static int DATE_RENCONTRE_COLIDX = 4;
 	public final static int HEURE_RENCONTRE_COLIDX = 5;
 
+	private static int BCBL_NOM_CELL_INDEX = indexOfColumn('G');
+	private static int BCBL_PRENOM_CELL_INDEX = indexOfColumn('H');
+	private static int BCBL_CATEGORIE_CELL_INDEX = indexOfColumn('I');
+	private static int BCBL_EQUIPE_CELL_INDEX = indexOfColumn('J');
+	private static int BCBL_EMAIL1_CELL_INDEX = indexOfColumn('P');
+	private static int BCBL_EMAIL2_CELL_INDEX = indexOfColumn('Q');
+
 	private static int indexOfColumn(char column) {
 		return column - 'A';
 	}
@@ -83,7 +90,7 @@ public class CreationOngletLicencies {
 		for (int r = 1; r < rows; r++) {
 			HSSFRow row = licenciesSheet.getRow(r);
 			if (row != null) {
-				Cell cellCategorie = row.getCell(8);
+				Cell cellCategorie = row.getCell(BCBL_CATEGORIE_CELL_INDEX);
 				if (cellCategorie == null) {
 					continue;
 				}
@@ -92,18 +99,18 @@ public class CreationOngletLicencies {
 					continue;
 				}
 
-				Cell cellEquipe = row.getCell(9);
+				Cell cellEquipe = row.getCell(BCBL_EQUIPE_CELL_INDEX);
 				if (cellEquipe == null) {
 					continue;
 				}
 				String equipe = cellEquipe.getStringCellValue();
 
 				Licencie licencie = new Licencie();
-				licencie.nomPrenom = row.getCell(5).getStringCellValue() + " "
-						+ row.getCell(6).getStringCellValue();
-				licencie.email = row.getCell(indexOfColumn('S')).getStringCellValue();
-				if (row.getCell(indexOfColumn('T')) != null) {
-					String email2 = row.getCell(indexOfColumn('T')).getStringCellValue();
+				licencie.nomPrenom = row.getCell(BCBL_NOM_CELL_INDEX).getStringCellValue() + " "
+						+ row.getCell(BCBL_PRENOM_CELL_INDEX).getStringCellValue();
+				licencie.email = row.getCell(BCBL_EMAIL1_CELL_INDEX).getStringCellValue();
+				if (row.getCell(BCBL_EMAIL2_CELL_INDEX) != null) {
+					String email2 = row.getCell(BCBL_EMAIL2_CELL_INDEX).getStringCellValue();
 					if (email2.trim().length() > 0) {
 						licencie.email += (";" + email2); 
 					}
