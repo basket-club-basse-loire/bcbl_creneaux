@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
+    <booleanAttribute key="com.ibm.debug.breakpoints.java.appendFile" value="false"/>
+    <stringAttribute key="com.ibm.debug.breakpoints.java.traceFilename" value="${workspace_loc}\${launch_config_name}_${launch_timestamp}.log"/>
+    <booleanAttribute key="com.ibm.debug.breakpoints.java.traceToConsole" value="true"/>
+    <booleanAttribute key="com.ibm.debug.breakpoints.java.traceToFile" value="false"/>
+    <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
+        <listEntry value="/creneaux/src/bcbl/planning/arbitrage/Planning.java"/>
+    </listAttribute>
+    <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
+        <listEntry value="1"/>
+    </listAttribute>
+    <booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_CLASSPATH_ONLY_JAR" value="false"/>
+    <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="bcbl.planning.arbitrage.Planning"/>
+    <stringAttribute key="org.eclipse.jdt.launching.MODULE_NAME" value="creneaux"/>
+    <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-extract &quot;data\2020_2021_bcbl_U09_phase1.xls&quot; -output &quot;tests\planning rencontres U09.xls&quot; -onglet &quot;Phase 1&quot; -mapping data\mapping_2020_2021.properties -licencies &quot;C:\Benoit\basket\equipes\saison 2020_2021\2020-2021 Listing Licencies.xls&quot; -overwrite"/>
+    <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="creneaux"/>
+</launchConfiguration>
